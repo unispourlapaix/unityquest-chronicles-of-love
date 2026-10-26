@@ -1,4 +1,3 @@
-import { getLocalTexts } from '../../utils/localTranslations';
 import React from 'react';
 import { ChevronRight, Star, Trophy, Sparkles, Info, Gem, Book, BookOpen, Heart } from 'lucide-react';
 import { bibleData, bibleTreasures } from '../../data/bible';
@@ -14,8 +13,7 @@ const MenuScreen = ({
   audio,
   totalXP, setTotalXP, setBibleReaderTab
 }) => {
-  const { t, currentLanguage } = useTranslation();
-  const localTexts = getLocalTexts(currentLanguage);
+  const { t } = useTranslation();
   const [companionIndex, setCompanionIndex] = React.useState(() => Math.floor(Math.random() * 4));
   const [showAudioPanel, setShowAudioPanel] = React.useState(false);
   const [gospelStatus, setGospelStatus] = React.useState({ isPlaying: false, currentIndex: 0 });
@@ -262,15 +260,42 @@ const MenuScreen = ({
         )}
       </div>
 
-      <div className="relative z-10 p-8 h-full flex flex-col justify-between overflow-y-auto">
+      <div className="relative z-10 p-8 h-full flex flex-col justify-between">
         <div className="text-center">
-          {/* Compagnon du début synchronisé avec le partage. */}
-          <button type="button" onClick={() => {
-            audio?.sounds?.tok();
-            setBibleReaderTab && setBibleReaderTab('unity');
-            setCurrentScreen('bibleReader');
-          }} aria-label={localTexts.labels.companion} className="mb-2 mx-auto block hover:scale-105 active:scale-95 transition-transform">
-            <img src={(process.env.PUBLIC_URL || '') + '/companions/sheep-' + companionIndex + '.svg'} width="260" height="250" alt={localTexts.labels.companion} className="w-40 h-auto mx-auto" />
+          {/* Logo d’origine avec croix moderne */}
+          <button
+            onClick={() => {
+              audio?.sounds?.tok();
+              setBibleReaderTab && setBibleReaderTab('unity');
+              setCurrentScreen('bibleReader');
+            }}
+            className="mb-2 mx-auto block hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+          >
+            <div className="w-32 h-32 rounded-full shadow-2xl hover:shadow-3xl flex items-center justify-center relative transition-all"
+                 style={{background: 'linear-gradient(145deg, #ffffff 0%, #f3f4f6 100%)'}}>
+              <div className="absolute inset-0 rounded-full"
+                   style={{background: 'radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%)'}}></div>
+              <div className="relative w-16 h-16 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center"
+                     style={{transform: 'translate(2px, 2px)', opacity: 0.2}}>
+                  <div className="w-12 h-2 bg-gray-400 rounded-full absolute"></div>
+                  <div className="h-12 w-2 bg-gray-400 rounded-full absolute"></div>
+                </div>
+                <div className="relative flex items-center justify-center">
+                  <div className="w-12 h-2 rounded-full absolute"
+                       style={{background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.5)'}}></div>
+                  <div className="h-12 w-2 rounded-full absolute"
+                       style={{background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.5)'}}></div>
+                </div>
+                <div className="absolute w-3 h-3 bg-white rounded-full"
+                     style={{boxShadow: '0 0 12px rgba(255, 255, 255, 0.8)', background: 'radial-gradient(circle at 30% 30%, #ffffff, #e0e7ff)'}}></div>
+              </div>
+              <div className="absolute inset-0">
+                <div className="absolute top-6 right-10 w-1 h-1 bg-purple-400 rounded-full opacity-60 animate-pulse"></div>
+                <div className="absolute bottom-8 left-8 w-1.5 h-1.5 bg-blue-400 rounded-full opacity-60 animate-pulse" style={{animationDelay: '1s'}}></div>
+                <div className="absolute top-12 left-12 w-1 h-1 bg-indigo-400 rounded-full opacity-60 animate-pulse" style={{animationDelay: '2s'}}></div>
+              </div>
+            </div>
           </button>
           {/* Titre avec effet 3D */}
           <div className="mb-4">

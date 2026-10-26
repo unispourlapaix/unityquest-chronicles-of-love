@@ -52,7 +52,9 @@
       "shared": "Partage terminé.",
       "score": "Mon score sur UnityQuest",
       "points": "points",
-      "choose": "Copier le texte du partage"
+      "choose": "Copier le texte du partage",
+      "downloaded": "Image téléchargée : joignez-la à votre message avec le texte ci-dessous.",
+      "imageError": "Impossible de créer l’image. Vous pouvez copier le texte ci-dessous."
     },
     "sheep": [
       "Un petit pas de douceur, un grand pas vers la paix.",
@@ -126,7 +128,9 @@
       "shared": "Sharing complete.",
       "score": "My UnityQuest score",
       "points": "points",
-      "choose": "Copy the sharing text"
+      "choose": "Copy the sharing text",
+      "downloaded": "Image downloaded: attach it to your message with the text below.",
+      "imageError": "The image could not be created. You can copy the text below."
     },
     "sheep": [
       "A little step of kindness, a big step towards peace.",
@@ -200,7 +204,9 @@
       "shared": "Contenido compartido.",
       "score": "Mi puntuación en UnityQuest",
       "points": "puntos",
-      "choose": "Copiar el texto para compartir"
+      "choose": "Copiar el texto para compartir",
+      "downloaded": "Imagen descargada: adjúntala a tu mensaje con el texto de abajo.",
+      "imageError": "No se pudo crear la imagen. Puedes copiar el texto de abajo."
     },
     "sheep": [
       "Un pequeño paso de bondad, un gran paso hacia la paz.",
@@ -274,7 +280,9 @@
       "shared": "Geteilt.",
       "score": "Mein UnityQuest-Punktestand",
       "points": "Punkte",
-      "choose": "Text zum Teilen kopieren"
+      "choose": "Text zum Teilen kopieren",
+      "downloaded": "Bild heruntergeladen: Füge es deiner Nachricht mit dem Text unten bei.",
+      "imageError": "Das Bild konnte nicht erstellt werden. Du kannst den Text unten kopieren."
     },
     "sheep": [
       "Ein kleiner Schritt der Güte, ein großer Schritt zum Frieden.",
@@ -348,7 +356,9 @@
       "shared": "Condivisione completata.",
       "score": "Il mio punteggio su UnityQuest",
       "points": "punti",
-      "choose": "Copia il testo da condividere"
+      "choose": "Copia il testo da condividere",
+      "downloaded": "Immagine scaricata: allegala al messaggio con il testo qui sotto.",
+      "imageError": "Impossibile creare l’immagine. Puoi copiare il testo qui sotto."
     },
     "sheep": [
       "Un piccolo passo di gentilezza, un grande passo verso la pace.",
@@ -422,7 +432,9 @@
       "shared": "Compartilhamento concluído.",
       "score": "Minha pontuação no UnityQuest",
       "points": "pontos",
-      "choose": "Copiar texto para compartilhar"
+      "choose": "Copiar texto para compartilhar",
+      "downloaded": "Imagem baixada: anexe-a à mensagem com o texto abaixo.",
+      "imageError": "Não foi possível criar a imagem. Você pode copiar o texto abaixo."
     },
     "sheep": [
       "Um pequeno passo de bondade, um grande passo rumo à paz.",
@@ -496,7 +508,9 @@
       "shared": "Отправлено.",
       "score": "Мой счёт в UnityQuest",
       "points": "очков",
-      "choose": "Скопировать текст для публикации"
+      "choose": "Скопировать текст для публикации",
+      "downloaded": "Изображение скачано: прикрепите его к сообщению с текстом ниже.",
+      "imageError": "Не удалось создать изображение. Можно скопировать текст ниже."
     },
     "sheep": [
       "Маленький шаг доброты — большой шаг к миру.",
@@ -570,7 +584,9 @@
       "shared": "Поширено.",
       "score": "Мій рахунок у UnityQuest",
       "points": "очок",
-      "choose": "Скопіювати текст для поширення"
+      "choose": "Скопіювати текст для поширення",
+      "downloaded": "Зображення завантажено: додайте його до повідомлення з текстом нижче.",
+      "imageError": "Не вдалося створити зображення. Можна скопіювати текст нижче."
     },
     "sheep": [
       "Маленький крок доброти — великий крок до миру.",
@@ -644,7 +660,9 @@
       "shared": "分享完成。",
       "score": "我在 UnityQuest 的分数",
       "points": "分",
-      "choose": "复制分享文字"
+      "choose": "复制分享文字",
+      "downloaded": "图片已下载：请将图片和下方文字一起发送。",
+      "imageError": "无法生成图片。你可以复制下方文字。"
     },
     "sheep": [
       "一小步善意，迈向和平的一大步。",
@@ -718,7 +736,9 @@
       "shared": "共有しました。",
       "score": "UnityQuest での私のスコア",
       "points": "ポイント",
-      "choose": "共有用テキストをコピー"
+      "choose": "共有用テキストをコピー",
+      "downloaded": "画像をダウンロードしました。下のテキストと一緒にメッセージに添付してください。",
+      "imageError": "画像を作成できませんでした。下のテキストをコピーできます。"
     },
     "sheep": [
       "小さな優しさの一歩が、平和への大きな一歩に。",
@@ -792,7 +812,9 @@
       "shared": "공유했습니다.",
       "score": "나의 UnityQuest 점수",
       "points": "포인트",
-      "choose": "공유 텍스트 복사"
+      "choose": "공유 텍스트 복사",
+      "downloaded": "이미지를 다운로드했습니다. 아래 텍스트와 함께 메시지에 첨부하세요.",
+      "imageError": "이미지를 만들 수 없습니다. 아래 텍스트를 복사할 수 있습니다."
     },
     "sheep": [
       "작은 친절의 한 걸음이 평화를 향한 큰 걸음이 됩니다.",
@@ -866,7 +888,9 @@
       "shared": "تمت المشاركة.",
       "score": "نقاطي في UnityQuest",
       "points": "نقطة",
-      "choose": "نسخ نص المشاركة"
+      "choose": "نسخ نص المشاركة",
+      "downloaded": "تم تنزيل الصورة: أرفقها برسالتك مع النص أدناه.",
+      "imageError": "تعذر إنشاء الصورة. يمكنك نسخ النص أدناه."
     },
     "sheep": [
       "خطوة صغيرة من اللطف، وخطوة كبيرة نحو السلام.",
@@ -940,7 +964,9 @@
       "shared": "השיתוף הושלם.",
       "score": "הניקוד שלי ב־UnityQuest",
       "points": "נקודות",
-      "choose": "העתקת טקסט השיתוף"
+      "choose": "העתקת טקסט השיתוף",
+      "downloaded": "התמונה הורדה: צרפו אותה להודעה עם הטקסט שלמטה.",
+      "imageError": "לא ניתן ליצור את התמונה. אפשר להעתיק את הטקסט שלמטה."
     },
     "sheep": [
       "צעד קטן של חסד, צעד גדול לעבר השלום.",
@@ -1014,7 +1040,9 @@
       "shared": "साझा कर दिया गया।",
       "score": "UnityQuest पर मेरा स्कोर",
       "points": "अंक",
-      "choose": "साझा करने का पाठ कॉपी करें"
+      "choose": "साझा करने का पाठ कॉपी करें",
+      "downloaded": "चित्र डाउनलोड हो गया: इसे नीचे दिए पाठ के साथ अपने संदेश में जोड़ें।",
+      "imageError": "चित्र नहीं बन सका। आप नीचे का पाठ कॉपी कर सकते हैं।"
     },
     "sheep": [
       "दयालुता का एक छोटा कदम, शांति की ओर एक बड़ा कदम।",
@@ -1088,7 +1116,9 @@
       "shared": "Udostępniono.",
       "score": "Mój wynik w UnityQuest",
       "points": "punktów",
-      "choose": "Kopiuj tekst do udostępnienia"
+      "choose": "Kopiuj tekst do udostępnienia",
+      "downloaded": "Obraz pobrany: dołącz go do wiadomości z tekstem poniżej.",
+      "imageError": "Nie udało się utworzyć obrazu. Możesz skopiować tekst poniżej."
     },
     "sheep": [
       "Mały krok dobroci, wielki krok ku pokojowi.",
@@ -1162,7 +1192,9 @@
       "shared": "Imeshirikiwa.",
       "score": "Alama zangu katika UnityQuest",
       "points": "alama",
-      "choose": "Nakili maandishi ya kushiriki"
+      "choose": "Nakili maandishi ya kushiriki",
+      "downloaded": "Picha imepakuliwa: iambatishe kwenye ujumbe wako pamoja na maandishi hapa chini.",
+      "imageError": "Picha haikuweza kuundwa. Unaweza kunakili maandishi hapa chini."
     },
     "sheep": [
       "Hatua ndogo ya wema, hatua kubwa kuelekea amani.",
@@ -1236,7 +1268,9 @@
       "shared": "Esili kokabolama.",
       "score": "Bapwɛ na ngai na UnityQuest",
       "points": "bapwɛ",
-      "choose": "Kopiya makomi ya kokabola"
+      "choose": "Kopiya makomi ya kokabola",
+      "downloaded": "Elilingi ekiti: tinda yango na nsango na yo elongo na makomi oyo ezali na nse.",
+      "imageError": "Tokoki kosala elilingi te. Okoki kokopiya makomi oyo ezali na nse."
     },
     "sheep": [
       "Litambe moke ya boboto, litambe monene epai ya kimya.",

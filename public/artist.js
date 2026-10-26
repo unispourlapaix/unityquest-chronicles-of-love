@@ -1,3 +1,4 @@
+import { shareScoreImage } from './share-score-image.js';
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
@@ -69,12 +70,12 @@
     if (progress.state !== 'ready') return;
     resetShare(); sharing = true; $('share').disabled = true;
     const mascot = companions[companion];
-    const text = `${mascot.face} ${progress.pseudo} — ${words[language].score} : ${format(progress.score)} ${words[language].points} !\n${translations[language].sheep[companion]}`;
+    const text = `${mascot.face} 💗 ✨ 😊 ${progress.pseudo} — ${words[language].score} : ${format(progress.score)} ${words[language].points} !\n${translations[language].sheep[companion]}`;
     try {
-      if (typeof navigator.share === 'function') { await navigator.share({ title: 'UnityQuest', text }); $('share-state').textContent = words[language].shared; }
-      else if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(text); $('share-state').textContent = words[language].copied; }
-      else showManual(text);
-    } catch (error) { if (error.name !== 'AbortError') showManual(text); }
+      const result = await shareScoreImage({ variant: companion, pseudo: progress.pseudo, score: progress.score, texts: translations[language], assetBase: '.', text });
+      if (result === 'shared') $('share-state').textContent = words[language].shared;
+      else if (result === 'downloaded') { showManual(text); $('share-state').textContent = words[language].downloaded; }
+    } catch (error) { if (error.name !== 'AbortError') { showManual(text); $('share-state').textContent = words[language].imageError; } }
     finally { sharing = false; renderProgress(); }
   }
   $('language').addEventListener('change', event => {

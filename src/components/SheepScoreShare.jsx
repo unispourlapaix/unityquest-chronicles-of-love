@@ -1,3 +1,4 @@
+import { shareScoreImage } from '../utils/shareScoreImage';
 import React, { useEffect, useState } from 'react';
 import useTranslation from '../hooks/useTranslation';
 import { getLocalTexts, getLocalPlayerName } from '../utils/localTranslations';
@@ -25,18 +26,14 @@ export default function SheepScoreShare({ score = 0, compact = false, variantInd
   const formattedScore = new Intl.NumberFormat(texts.locale).format(score);
   const share = async () => {
     const pseudo = getLocalPlayerName(texts);
-    const text = `${mascot.face} ${pseudo} — ${texts.words.score} : ${formattedScore} ${texts.words.points} !\n${texts.sheep[index]}`;
+    const text = `${mascot.face} 💗 ✨ 😊 ${pseudo} — ${texts.words.score} : ${formattedScore} ${texts.words.points} !\n${texts.sheep[index]}`;
     setStatus(''); setManualText('');
     try {
-      if (navigator.share) {
-        await navigator.share({ title: texts.words.score, text });
-        setStatus('shared');
-      } else if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text);
-        setStatus('copied');
-      } else { setManualText(text); setStatus('manual'); }
+      const result = await shareScoreImage({ variant: index, pseudo, score, texts, assetBase: process.env.PUBLIC_URL || '', text });
+      if (result === 'shared') setStatus('shared');
+      else if (result === 'downloaded') { setManualText(text); setStatus('downloaded'); }
     } catch (error) {
-      if (error.name !== 'AbortError') { setManualText(text); setStatus('manual'); }
+      if (error.name !== 'AbortError') { setManualText(text); setStatus('imageError'); }
     }
   };
   return <section aria-label={texts.labels.section} dir={texts.dir} className={`${mascot.color} rounded-2xl border border-purple-100 p-3 my-3 text-center relative`}>
