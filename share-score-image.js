@@ -22,7 +22,7 @@ export async function createScoreImage({ variant = 0, pseudo, score, texts, asse
     image.src = `${assetBase}/companions/sheep-${variant}.svg`;
   });
   ctx.drawImage(sheep, 250, 220, 580, 558);
-  const name = String(pseudo || texts.words.anonymous);
+  const name = String(pseudo || '');
   ctx.fillStyle = '#40354e'; fit(name, 48, 850, '600'); ctx.fillText(name, 540, 810);
   const value = new Intl.NumberFormat(texts.locale).format(score);
   ctx.fillStyle = '#685297'; fit(value, 100, 850, '750'); ctx.fillText(value, 540, 920);
