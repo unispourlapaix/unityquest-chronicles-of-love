@@ -17,11 +17,11 @@ const MenuScreen = ({
   const [companionIndex, setCompanionIndex] = React.useState(() => Math.floor(Math.random() * 4));
   const [showAudioPanel, setShowAudioPanel] = React.useState(false);
   const [gospelStatus, setGospelStatus] = React.useState({ isPlaying: false, currentIndex: 0 });
-  
+
   // Mise à jour du statut gospel
   React.useEffect(() => {
     if (!showAudioPanel) return;
-    
+
     const updateGospelStatus = () => {
       if (window.faithGospelPlayer) {
         setGospelStatus({
@@ -30,15 +30,15 @@ const MenuScreen = ({
         });
       }
     };
-    
+
     // Mise à jour initiale
     updateGospelStatus();
-    
+
     // Mise à jour périodique quand le panneau est ouvert
     const interval = setInterval(updateGospelStatus, 1000);
     return () => clearInterval(interval);
   }, [showAudioPanel]);
-  
+
   const calculatePlayerRank = () => {
     if (wisdomPoints >= 12000) return t('ranks.saint');
     if (wisdomPoints >= 8000) return t('ranks.prophet');
@@ -76,7 +76,7 @@ const MenuScreen = ({
   const resetProgress = () => {
     // Jouer le son de reset
     audio?.sounds?.reset();
-    
+
     // Petite pause pour que l'utilisateur entende le son avant le rechargement
     setTimeout(() => {
       localStorage.removeItem('faithChroniclesProgress');
@@ -141,7 +141,7 @@ const MenuScreen = ({
               className="fixed inset-0 z-40"
               onClick={() => setShowAudioPanel(false)}
             />
-            
+
             {/* Panneau complet ouvert */}
             <div className="relative z-50 bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-lg border border-gray-200">
             <div className="flex items-center gap-2 mb-2">
@@ -160,7 +160,7 @@ const MenuScreen = ({
               >
                 {audio?.isEnabled ? '🔊' : '🔇'}
               </button>
-              
+
               {/* Slider volume compact */}
               {audio?.isEnabled && (
                 <div className="flex items-center gap-1">
@@ -179,7 +179,7 @@ const MenuScreen = ({
                   </span>
                 </div>
               )}
-              
+
               {/* Bouton fermer */}
               <button
                 onClick={() => setShowAudioPanel(false)}
@@ -189,13 +189,13 @@ const MenuScreen = ({
                 ✕
               </button>
             </div>
-            
+
             {/* Sélecteur de langue */}
             <div className="mb-2">
               <div className="text-xs text-gray-600 mb-1">{t('menu.language')} :</div>
               <LanguageSelector audio={audio} />
             </div>
-            
+
             {/* Bouton Reset dans le panneau audio */}
             <div className="border-t border-gray-200 pt-2">
               <button
@@ -262,7 +262,7 @@ const MenuScreen = ({
 
       <div className="relative z-10 p-8 h-full flex flex-col justify-between">
         <div className="text-center">
-          {/* Logo d’origine avec croix moderne */}
+          {/* Logo avec croix moderne - Cliquable pour Unity */}
           <button
             onClick={() => {
               audio?.sounds?.tok();
@@ -283,12 +283,21 @@ const MenuScreen = ({
                 </div>
                 <div className="relative flex items-center justify-center">
                   <div className="w-12 h-2 rounded-full absolute"
-                       style={{background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.5)'}}></div>
+                       style={{
+                         background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
+                         boxShadow: '0 2px 8px rgba(139, 92, 246, 0.5)'
+                       }}></div>
                   <div className="h-12 w-2 rounded-full absolute"
-                       style={{background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.5)'}}></div>
+                       style={{
+                         background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)',
+                         boxShadow: '0 2px 8px rgba(139, 92, 246, 0.5)'
+                       }}></div>
                 </div>
                 <div className="absolute w-3 h-3 bg-white rounded-full"
-                     style={{boxShadow: '0 0 12px rgba(255, 255, 255, 0.8)', background: 'radial-gradient(circle at 30% 30%, #ffffff, #e0e7ff)'}}></div>
+                     style={{
+                       boxShadow: '0 0 12px rgba(255, 255, 255, 0.8)',
+                       background: 'radial-gradient(circle at 30% 30%, #ffffff, #e0e7ff)'
+                     }}></div>
               </div>
               <div className="absolute inset-0">
                 <div className="absolute top-6 right-10 w-1 h-1 bg-purple-400 rounded-full opacity-60 animate-pulse"></div>
@@ -297,6 +306,7 @@ const MenuScreen = ({
               </div>
             </div>
           </button>
+
           {/* Titre avec effet 3D */}
           <div className="mb-4">
             <h1 className={`font-black mb-3 tracking-wider relative ${
@@ -335,7 +345,7 @@ const MenuScreen = ({
               }}>{t('app.title').split(' ')[0]}</span>
               {t('app.title').split(' ')[0]}
             </h1>
-            
+
             {t('app.title').split(' ').slice(1).join(' ') && (
               <h2 className={`font-medium tracking-[0.5em] relative ${
                 t('app.title').split(' ').slice(1).join(' ').replace('\n', ' ').length <= 15 ? 'text-2xl' : 
@@ -361,7 +371,7 @@ const MenuScreen = ({
               </h2>
             )}
           </div>
-          
+
           <div className="text-xs text-gray-600 mb-8">
             <div className="relative">
               {t('app.subtitle')}<br/>
@@ -371,7 +381,7 @@ const MenuScreen = ({
               <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent opacity-70"></div>
             </div>
           </div>
-          
+
           {/* Bloc-note avec progression */}
           <div className="mb-8 p-4 bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl shadow-xl border-2 border-amber-200 relative">
             <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 flex gap-2">
@@ -414,11 +424,11 @@ const MenuScreen = ({
           >
             {/* Effet de brillance au hover */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
-            
+
             <span className="relative z-10">{t('buttons.play')}</span>
             <ChevronRight className="w-5 h-5 relative z-10 transform group-hover:translate-x-1 transition-transform" />
           </button>
-          
+
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="bg-gradient-to-br from-white to-yellow-50 rounded-2xl shadow-lg p-3 border border-yellow-100 transform hover:scale-105 transition-all duration-200 hover:shadow-xl">
               <Trophy className="w-6 h-6 mx-auto text-yellow-500 mb-1 drop-shadow-sm" />
@@ -436,7 +446,7 @@ const MenuScreen = ({
               <div className="font-bold text-blue-800 text-sm">{revelationPoints}</div>
             </div>
           </div>
-          
+
           {/* Menu du bas - Version simplifiée avec 3 boutons */}
           <div className="mt-6 grid grid-cols-3 gap-3 px-2">
             <button 
@@ -449,7 +459,7 @@ const MenuScreen = ({
               <Info className="w-5 h-5 text-blue-500 mb-1 drop-shadow-sm group-hover:text-blue-600 transition-colors" />
               <span className="text-[10px] text-gray-700 font-medium group-hover:text-gray-800 transition-colors">{t('menu.info')}</span>
             </button>
-            
+
             <button 
               onClick={() => {
                 audio?.sounds?.tick();
@@ -474,7 +484,7 @@ const MenuScreen = ({
                         📖 {t('treasures.openReader')}
                       </button>
                     </div>
-                    
+
                     <div className="p-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl">
                       <div className="text-xs font-bold text-amber-700 mb-2">✨ {t('treasures.verse')}</div>
                       <div className="text-sm text-gray-700 italic">{treasure.verse}</div>
@@ -627,7 +637,7 @@ const MenuScreen = ({
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
                 <span className="text-white text-[6px] font-bold">N</span>
               </div>
-              
+
               <Book className="w-5 h-5 text-blue-600 mb-1 drop-shadow-sm group-hover:text-blue-700 transition-colors" />
               <span className="text-[10px] text-gray-700 font-medium text-center group-hover:text-gray-800 transition-colors">{t('menu.john')}</span>
             </button>
