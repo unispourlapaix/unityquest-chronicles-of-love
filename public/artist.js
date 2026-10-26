@@ -70,9 +70,11 @@ import { shareScoreImage } from './share-score-image.js';
     if (progress.state !== 'ready') return;
     resetShare(); sharing = true; $('share').disabled = true;
     const mascot = companions[companion];
-    const text = `${mascot.face} 💗 ✨ 😊 ${progress.pseudo} — ${words[language].score} : ${format(progress.score)} ${words[language].points} !\n${translations[language].sheep[companion]}`;
+    const savedName = localStorage.getItem('faithChronicles_pseudo')?.trim();
+    const sharedName = !savedName || savedName === 'Joueur local' ? '' : savedName;
+    const text = `${mascot.face} 💗 ✨ 😊 ${sharedName ? sharedName + ' — ' : ''}${words[language].score} : ${format(progress.score)} ${words[language].points} !\n${translations[language].sheep[companion]}`;
     try {
-      const result = await shareScoreImage({ variant: companion, pseudo: progress.pseudo, score: progress.score, texts: translations[language], assetBase: '.', text });
+      const result = await shareScoreImage({ variant: companion, pseudo: sharedName, score: progress.score, texts: translations[language], assetBase: '.', text });
       if (result === 'shared') $('share-state').textContent = words[language].shared;
       else if (result === 'downloaded') { showManual(text); $('share-state').textContent = words[language].downloaded; }
     } catch (error) { if (error.name !== 'AbortError') { showManual(text); $('share-state').textContent = words[language].imageError; } }

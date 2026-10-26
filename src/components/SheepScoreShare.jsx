@@ -28,8 +28,9 @@ export default function SheepScoreShare({ score = 0, compact = false, variantInd
   const share = async () => {
     if (isSharing) return;
     setIsSharing(true);
-    const pseudo = getLocalPlayerName(texts);
-    const text = `${mascot.face} 💗 ✨ 😊 ${pseudo} — ${texts.words.score} : ${formattedScore} ${texts.words.points} !\n${texts.sheep[index]}`;
+    const savedName = localStorage.getItem('faithChronicles_pseudo')?.trim();
+    const pseudo = !savedName || savedName === 'Joueur local' ? '' : savedName;
+    const text = `${mascot.face} 💗 ✨ 😊 ${pseudo ? pseudo + ' — ' : ''}${texts.words.score} : ${formattedScore} ${texts.words.points} !\n${texts.sheep[index]}`;
     setStatus(''); setManualText('');
     try {
       const result = await shareScoreImage({ variant: index, pseudo, score, texts, assetBase: process.env.PUBLIC_URL || '', text });
