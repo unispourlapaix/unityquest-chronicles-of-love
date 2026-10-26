@@ -7,3 +7,23 @@
 .artwork{width:100%;height:auto;aspect-ratio:1 / 1;border-radius:50%;justify-self:center;max-width:460px}
 @media(max-width:900px){.artwork{height:auto;max-width:380px}}
 @media(max-width:600px){.artwork{width:min(100%,340px);height:auto;border-radius:50%}.art-caption{bottom:32px;font-size:8px;letter-spacing:2px}.art-faith{top:55px;left:55px}.art-love{top:46%;right:28px}.art-peace{bottom:65px;left:55px}}
+
+/* Langues longues et écriture de droite à gauche. */
+[dir="rtl"] .hero,[dir="rtl"] .section-heading,[dir="rtl"] .journey{text-align:right}
+[dir="rtl"] .creation-card{text-align:right}
+[dir="rtl"] .title-star{margin-left:0;margin-right:28px}
+[dir="rtl"] .stats strong,[dir="rtl"] .card-domain{unicode-bidi:plaintext}
+[dir="rtl"] .art-word{direction:rtl}
+.art-word{font-size:clamp(16px,2vw,26px);max-width:35%;overflow-wrap:anywhere}
+.art-caption{max-width:70%;margin-inline:auto;line-height:1.6}
+.creation-card h3,.creation-card p,.eyebrow{overflow-wrap:anywhere}
+.brand,.card-domain{direction:ltr;unicode-bidi:isolate}
+@media(max-width:600px){html:not([lang="fr"]):not([lang="en"]) h1{font-size:clamp(52px,17vw,68px)}.art-caption{font-size:7px;letter-spacing:1px}.art-word{font-size:20px}.section-heading .eyebrow{line-height:1.6}}
+
+/* Compagnon kawaii : dessin local, quatre expressions sur un nuage de cœurs. */
+.sheep-face{display:block;width:180px;height:auto;flex:0 0 180px;max-width:100%;object-fit:contain;filter:drop-shadow(0 5px 8px #8a688011)}
+.sheep-panel{gap:20px;padding-block:12px}
+@media(max-width:900px){.sheep-face{width:150px;flex-basis:150px}}
+@media(max-width:600px){.sheep-panel{justify-content:center}.sheep-face{width:190px;flex-basis:190px}.sheep-copy{flex-basis:100%;text-align:center}.sheep-actions{margin-top:8px}}
+
+.gospel-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}.gospel-links .platform-link{display:inline-block;padding:8px 10px;border:1px solid #a6b6a5;border-radius:7px;text-decoration:none;line-height:1.5}.gospel-links .platform-link:hover{background:#ffffff80}.gospel-links .platform-link:focus-visible{outline:3px solid #6350a2;outline-offset:3px}
