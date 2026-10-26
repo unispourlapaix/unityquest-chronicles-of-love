@@ -7,7 +7,7 @@ import { useTranslation } from '../../../contexts/LanguageContext.jsx';
 const MenuScreen = ({ 
   wisdomPoints, unlockedLevels, levelStars, score, revelationPoints,
   setCurrentScreen, setShowModal, setModalContent, setCurrentLevel,
-  user, isAnonymousMode, isSupabaseConnected, onLogout, onSwitchToLogin, onRefresh, audio
+  user, isAnonymousMode, isSupabaseConnected, onSwitchToLogin, onRefresh, audio
 }) => {
   const { t } = useTranslation();
   const [showAudioPanel, setShowAudioPanel] = React.useState(false);
@@ -196,7 +196,6 @@ const MenuScreen = ({
         user={user}
         isAnonymousMode={isAnonymousMode}
         isSupabaseConnected={isSupabaseConnected}
-        onLogout={onLogout}
         onSwitchToLogin={onSwitchToLogin}
         onRefresh={onRefresh}
         audio={audio}
