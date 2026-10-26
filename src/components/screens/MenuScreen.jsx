@@ -11,7 +11,7 @@ import useTranslation from '../../hooks/useTranslation';
 const MenuScreen = ({ 
   wisdomPoints, unlockedLevels, levelStars, score, revelationPoints,
   setCurrentScreen, setShowModal, setModalContent, setCurrentLevel,
-  user, isAnonymousMode, isSupabaseConnected, onLogout, onSwitchToLogin, onRefresh, audio,
+  audio,
   totalXP, setTotalXP, setBibleReaderTab
 }) => {
   const { t } = useTranslation();
@@ -117,15 +117,7 @@ const MenuScreen = ({
       </div>
 
       {/* Indicateur de connexion discret */}
-      <ConnectionStatus 
-        user={user}
-        isAnonymousMode={isAnonymousMode}
-        isSupabaseConnected={isSupabaseConnected}
-        onLogout={onLogout}
-        onSwitchToLogin={onSwitchToLogin}
-        onRefresh={onRefresh}
-        audio={audio}
-      />
+      <ConnectionStatus audio={audio} score={score} />
 
       {/* Contrôles Audio - juste l'icône au début */}
       <div className="absolute top-3 left-3 z-50">

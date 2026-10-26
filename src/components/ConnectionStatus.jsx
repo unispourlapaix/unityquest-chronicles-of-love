@@ -1,41 +1,20 @@
+import { getLocalTexts, getLocalPlayerName } from '../utils/localTranslations';
+import SheepScoreShare from './SheepScoreShare';
 import React, { useState } from 'react';
-import { User, Mail, Cloud, LogOut, RefreshCw, Save, Edit2, Check, X } from 'lucide-react';
+import { User, Edit2, Check, X } from 'lucide-react';
 import { getLanguage, getLanguageList } from '../data/translations/languages.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 
-const ConnectionStatus = ({ 
-  user, 
-  isAnonymousMode, 
-  isSupabaseConnected, 
-  onLogout,
-  onRefresh,
-  onManualSave,
-  lastSaveTime,
-  className = "",
-  audio, // Ajout du prop audio
-  onSwitchToLogin // Nouvelle prop pour basculer vers l'écran de connexion
-}) => {
+const ConnectionStatus = ({ className = "", audio, score = 0 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [isEditingPseudo, setIsEditingPseudo] = useState(false);
   const [newPseudo, setNewPseudo] = useState('');
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
-  const { t, changeLanguage } = useTranslation();
-
-  const handleSave = async () => {
-    if (!onManualSave) return;
-    
-    setIsSaving(true);
-    try {
-      await onManualSave();
-      setTimeout(() => setIsSaving(false), 2000); // Feedback visuel
-    } catch (error) {
-      setIsSaving(false);
-    }
-  };
+  const { t, changeLanguage, currentLanguage } = useTranslation();
+  const texts = getLocalTexts(currentLanguage);
 
   const handlePseudoEdit = () => {
-    const currentPseudo = localStorage.getItem('faithChronicles_pseudo') || 'Anonyme';
+    const currentPseudo = getLocalPlayerName(texts);
     setNewPseudo(currentPseudo);
     setIsEditingPseudo(true);
   };
@@ -59,11 +38,6 @@ const ConnectionStatus = ({
     setNewPseudo('');
   };
 
-  const formatLastSave = () => {
-    if (!lastSaveTime) return t('login.never');
-    return new Date(lastSaveTime).toLocaleTimeString();
-  };
-
   // Récupérer la langue actuelle et son drapeau
   const getCurrentLanguage = () => {
     const langCode = localStorage.getItem('faithchronicles_language') || 'fr';
@@ -77,57 +51,11 @@ const ConnectionStatus = ({
     setShowLanguageMenu(false);
   };
 
-  // Ne pas afficher si pas d'utilisateur ET pas en mode anonyme
-  if (!user && !isAnonymousMode) return null;
-
-  // Récupérer le pseudo à afficher
-  const getDisplayName = () => {
-    // Toujours récupérer le pseudo depuis localStorage en priorité
-    const savedPseudo = localStorage.getItem('faithChronicles_pseudo');
-    
-    if (savedPseudo) {
-      return savedPseudo;
-    }
-    
-    if (isAnonymousMode) {
-      return 'Anonyme';
-    } else if (user) {
-      // Fallback sur l'email si pas de pseudo
-      return user.email?.split('@')[0] || 'Joueur';
-    }
-    return 'Joueur';
+  const status = {
+    title: getLocalPlayerName(texts),
+    color: 'bg-purple-500'
   };
-
-  const getStatusInfo = () => {
-    if (isAnonymousMode) {
-      return {
-        type: 'anonymous',
-        icon: User,
-        title: getDisplayName(),
-        color: 'bg-orange-500',
-        dotColor: 'bg-orange-400'
-      };
-    } else if (isSupabaseConnected) {
-      return {
-        type: 'connected',
-        icon: Cloud,
-        title: getDisplayName(),
-        color: 'bg-green-500',
-        dotColor: 'bg-green-400'
-      };
-    } else {
-      return {
-        type: 'email_pending',
-        icon: Mail,
-        title: getDisplayName(),
-        color: 'bg-blue-500',
-        dotColor: 'bg-blue-400'
-      };
-    }
-  };
-
-  const status = getStatusInfo();
-  const Icon = status.icon;
+  const Icon = User;
 
   return (
     <div className={`absolute top-4 right-4 z-50 ${className}`}>
@@ -155,14 +83,14 @@ const ConnectionStatus = ({
               audio?.sounds?.buttonClick(); // Son clic bouton
               setIsExpanded(!isExpanded);
             }}
+            aria-label={texts.labels.profile}
+            aria-expanded={isExpanded}
             className="flex items-center justify-center w-12 h-12 flex-shrink-0"
           >
             <div className="relative">
               <div className={`${status.color} rounded-full p-2 shadow-sm`}>
                 <Icon className="w-4 h-4 text-white" />
               </div>
-              {/* Indicateur de statut */}
-              <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 ${status.dotColor} rounded-full border-2 border-white ${status.type === 'email_pending' ? 'animate-pulse' : ''}`}></div>
             </div>
           </button>
 
@@ -177,12 +105,12 @@ const ConnectionStatus = ({
                       type="text"
                       value={newPseudo}
                       onChange={(e) => setNewPseudo(e.target.value)}
-                      onKeyPress={(e) => {
+                      onKeyDown={(e) => {
                         if (e.key === 'Enter') handlePseudoSave();
                         if (e.key === 'Escape') handlePseudoCancel();
                       }}
                       className="text-sm px-2 py-1 border border-gray-300 rounded w-28 focus:outline-none focus:border-blue-400 font-medium"
-                      placeholder="Pseudo..."
+                      placeholder={texts.labels.nickname} aria-label={texts.labels.nickname}
                       maxLength={20}
                       autoFocus
                     />
@@ -228,7 +156,7 @@ const ConnectionStatus = ({
                           // console.log('Nouvel état du menu:', !showLanguageMenu);
                         }}
                         className="flex items-center gap-1 px-2 py-1 hover:bg-gray-100 rounded-md transition-all cursor-pointer"
-                        title={`Langue: ${getCurrentLanguage().nativeName}`}
+                        title={`${texts.labels.language}: ${getCurrentLanguage().nativeName}`}
                         type="button"
                       >
                         <span className="text-base">
@@ -263,7 +191,7 @@ const ConnectionStatus = ({
                           >
                             {/* Titre */}
                             <div className="text-center mb-3 pb-2 border-b border-gray-200 flex-shrink-0">
-                              <h3 className="text-lg font-bold text-gray-800">🌍 Langue / Language</h3>
+                              <h3 className="text-lg font-bold text-gray-800">🌍 {texts.labels.language}</h3>
                             </div>
                             
                             {/* Liste des langues - 2 colonnes avec scroll */}
@@ -312,62 +240,13 @@ const ConnectionStatus = ({
                 )}
               </div>
 
-              {/* Boutons d'action */}
-              <div className="flex items-center space-x-1">
-                {/* Bouton "Se connecter" pour les anonymes */}
-
-                {/* Bouton de sauvegarde manuelle */}
-                {onManualSave && (
-                  <button
-                    onClick={() => {
-                      audio?.sounds?.pof(); // Son de sauvegarde
-                      handleSave();
-                    }}
-                    disabled={isSaving}
-                    className="p-1.5 hover:bg-green-50 rounded-full transition-colors group"
-                    title={`${t('login.save')}${lastSaveTime ? ` (${t('login.lastSave')}: ${formatLastSave()})` : ''}`}
-                  >
-                    <Save className={`w-3.5 h-3.5 ${isSaving ? 'text-green-300 animate-pulse' : 'text-green-600 group-hover:text-green-700'}`} />
-                  </button>
-                )}
-
-                {/* Bouton refresh pour utilisateurs connectés */}
-                {onRefresh && isSupabaseConnected && (
-                  <button
-                    onClick={() => {
-                      audio?.sounds?.tick(); // Son de rafraîchissement
-                      onRefresh();
-                    }}
-                    className="p-1.5 hover:bg-blue-50 rounded-full transition-colors group"
-                    title={t('login.refresh')}
-                  >
-                    <RefreshCw className="w-3.5 h-3.5 text-blue-600 group-hover:text-blue-700" />
-                  </button>
-                )}
-
-                {/* Bouton de déconnexion */}
-                {onLogout && (
-                  <button
-                    onClick={() => {
-                      audio?.sounds?.wrash(); // Son de déconnexion
-                      onLogout();
-                    }}
-                    className="p-1.5 hover:bg-red-50 rounded-full transition-colors group"
-                    title={t('login.logout')}
-                  >
-                    <LogOut className="w-3.5 h-3.5 text-red-600 group-hover:text-red-700" />
-                  </button>
-                )}
-              </div>
             </div>
           )}
         </div>
       </div>
-
-      {/* Message d'aide discret */}
-      {isExpanded && status.type === 'email_pending' && (
-        <div className="mt-2 text-xs text-blue-600 bg-blue-50 rounded-lg p-2 shadow-sm animate-fade-in">
-          💌 {t('login.checkEmail')}
+      {isExpanded && (
+        <div className="absolute right-0 top-14 w-[280px] max-w-[85vw] z-50 rounded-2xl bg-white shadow-xl p-2">
+          <SheepScoreShare score={score} compact />
         </div>
       )}
     </div>

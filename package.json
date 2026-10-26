@@ -35,7 +35,9 @@
     "add-strong:all": "node scripts/addStrongToTranslations.js",
     "download:bible": "node scripts/downloadFromGetBible.js",
     "download:uk": "node scripts/downloadFromGetBible.js uk",
-    "download:he": "node scripts/downloadFromGetBible.js he"
+    "download:he": "node scripts/downloadFromGetBible.js he",
+    "sync:local-translations": "node scripts/sync-local-translations.mjs",
+    "test:local-translations": "node scripts/test-local-translations.mjs"
   },
   "eslintConfig": {
     "extends": [

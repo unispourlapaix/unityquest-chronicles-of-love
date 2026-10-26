@@ -4,12 +4,8 @@ import { useAuth } from '../hooks/useAuth';
 import { useGameProgress } from '../hooks/useGameProgress';
 import useAudio from '../hooks/useAudio';
 import { debounce } from '../utils/retryHelper.js';
-import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 
-import LoginScreen from './screens/LocalLoginScreen';
-import PasswordResetScreen from './screens/PasswordResetScreen';
-import PseudoSetupScreen from './screens/PseudoSetupScreen';
 import MenuScreen from './screens/MenuScreen';
 import LevelSelectScreen from './screens/LevelSelectScreen';
 import ChallengeScreen from './screens/ChallengeScreen';
@@ -21,18 +17,8 @@ import InfoScreen from './screens/InfoScreen';
 import InstallPrompt from './InstallPrompt';
 
 const FaithChronicles = () => {
-  // Hooks Supabase
-  const { 
-    user, 
-    loading: authLoading, 
-    signInWithEmail, 
-    signInAnonymously,
-    signInWithPassword,
-    signUpWithPassword,
-    resetPassword,
-    importSessionFromProduction, 
-    isConfigured 
-  } = useAuth();
+  // Cette édition démarre directement en mode local.
+  const { user, isConfigured } = useAuth();
   const { progress, saveProgress: saveToSupabase, saveLevelStars, loadAllStars, forceRefresh, lastSaveTime } = useGameProgress(user?.id);
   
   // Hook Audio 🎵
@@ -43,14 +29,6 @@ const FaithChronicles = () => {
   useEffect(() => {
     moduleManager.setLanguage(currentLanguage);
   }, [currentLanguage]);
-
-  // Afficher un avertissement si Supabase n'est pas configuré
-  useEffect(() => {
-    if (!isConfigured) {
-      // console.warn('⚠️ Supabase non configuré - Mode hors-ligne uniquement');
-      // console.warn('📖 Consultez SUPABASE_QUICKSTART.md pour la configuration');
-    }
-  }, [isConfigured]);
 
   // Fonction de chargement depuis localStorage (fallback)
   const loadProgress = () => {
@@ -70,9 +48,9 @@ const FaithChronicles = () => {
   };
 
   const savedProgress = loadProgress();
-  const [currentScreen, setCurrentScreen] = useState(user ? 'menu' : 'login');
+  const [currentScreen, setCurrentScreen] = useState('menu');
   const [bibleReaderTab, setBibleReaderTab] = useState('bible'); // État pour l'onglet Bible Reader
-  const [isAnonymousMode, setIsAnonymousMode] = useState(false); // Mode local sans Supabase
+  const [isAnonymousMode] = useState(true); // Mode local dès le premier affichage
   const [currentLevel, setCurrentLevel] = useState(1);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -93,225 +71,14 @@ const FaithChronicles = () => {
   const [modalContent, setModalContent] = useState({title: '', content: ''});
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
 
-  // Détecter si on arrive depuis un lien de réinitialisation de mot de passe
+  // Le pseudo reste modifiable dans le menu du profil.
   useEffect(() => {
-    if (!isConfigured) return;
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const type = hashParams.get('type');
-    const error = hashParams.get('error');
-    const errorDescription = hashParams.get('error_description');
-    
-    if (error) {
-      // console.warn('⚠️ Erreur dans l\'URL:', error, errorDescription);
-      
-      if (error === 'access_denied' && errorDescription?.includes('expired')) {
-        // console.log('🔑 Lien de réinitialisation expiré - Affichage du message d\'erreur');
-        setCurrentScreen('password-reset');
-      } else {
-        // console.error('❌ Erreur d\'authentification:', error);
-      }
-    } else if (type === 'recovery') {
-      // console.log('🔑 Lien de réinitialisation de mot de passe détecté');
-      setCurrentScreen('password-reset');
-    }
-  }, []);
-
-  // Gérer la connexion utilisateur
-  const handleAnonymousLogin = async (pseudo) => {
     try {
-      // Mode anonyme = TOUJOURS local, pas de Supabase
-      // console.log('🎮 Mode anonyme - Sauvegarde locale uniquement');
-      localStorage.setItem('faithChronicles_pseudo', pseudo);
       localStorage.setItem('faithChronicles_mode', 'anonymous');
-      setIsAnonymousMode(true);
-      setCurrentScreen('menu');
-      return { data: { pseudo }, error: null };
-    } catch (error) {
-      // console.error('❌ Erreur handleAnonymousLogin:', error);
-      return { data: null, error };
-    }
-  };
-
-  const handleEmailLogin = async (email, pseudo = null) => {
-    localStorage.setItem('faithChronicles_mode', 'email');
-    if (pseudo) {
-      localStorage.setItem('faithChronicles_pseudo', pseudo);
-    }
-    const result = await signInWithEmail(email, pseudo);
-    return result;
-  };
-
-  // Gérer la configuration du pseudo pour utilisateurs connectés
-  const handlePseudoSetup = async (pseudo) => {
-    try {
-      localStorage.setItem('faithChronicles_pseudo', pseudo);
-      // console.log('✅ Pseudo configuré pour utilisateur connecté:', pseudo);
-      
-      // ⚠️ IMPORTANT: Ne sauvegarder en ligne QUE si l'utilisateur n'est PAS anonyme
-      if (user?.email && isConfigured && !isAnonymousMode) {
-        // console.log('💾 Sauvegarde en ligne dans table USERS globale...');
-        try {
-          // STRATÉGIE ROBUSTE: Vérifier si l'utilisateur existe, puis UPDATE ou INSERT
-          
-          // 1. Vérifier si l'utilisateur existe déjà
-          const { data: existingUser, error: checkError } = await supabase
-            .from('users')
-            .select('email, pseudo')
-            .eq('email', user.email)
-            .single();
-          
-          if (checkError && checkError.code !== 'PGRST116') {
-            // Erreur autre que "pas trouvé"
-            throw checkError;
-          }
-          
-          if (existingUser) {
-            // 2. Utilisateur existe → UPDATE
-            // console.log('👤 Utilisateur existe, mise à jour du pseudo...');
-            const { error: updateError } = await supabase
-              .from('users')
-              .update({ 
-                pseudo: pseudo,
-                avatar: '✨',
-                pays: 'FR'
-              })
-              .eq('email', user.email);
-            
-            if (updateError) {
-              throw updateError;
-            } else {
-              // console.log('✅ Pseudo mis à jour dans table USERS globale');
-            }
-          } else {
-            // 3. Utilisateur n'existe pas → INSERT
-            // console.log('➕ Nouvel utilisateur, création...');
-            const { error: insertError } = await supabase
-              .from('users')
-              .insert({ 
-                email: user.email,
-                pseudo: pseudo,
-                avatar: '✨',
-                pays: 'FR'
-              });
-            
-            if (insertError) {
-              throw insertError;
-            } else {
-              // console.log('✅ Nouvel utilisateur créé dans table USERS globale');
-            }
-          }
-          
-        } catch (error) {
-          // console.warn('⚠️ Erreur sauvegarde pseudo dans users globale:', error.message);
-        }
-      } else if (isAnonymousMode) {
-        // console.log('🔒 Mode anonyme: sauvegarde uniquement locale (pas de BDD)');
-      } else {
-        // console.log('⚠️ Pas de sauvegarde en ligne: utilisateur non connecté ou Supabase non configuré');
-      }
-      
-      setCurrentScreen('menu');
-    } catch (error) {
-      // console.error('❌ Erreur configuration pseudo:', error);
-      throw error;
-    }
-  };
-
-  // Rediriger vers le menu quand l'utilisateur se connecte (email uniquement)
-  useEffect(() => {
-    if (user && currentScreen === 'login' && !isAnonymousMode) {
-      // Vérifier si l'utilisateur connecté a un pseudo
-      const savedPseudo = localStorage.getItem('faithChronicles_pseudo');
-      
-      if (!savedPseudo) {
-        // Pas de pseudo configuré, aller à l'écran de configuration
-        setCurrentScreen('pseudo-setup');
-      } else {
-        // Pseudo déjà configuré, aller au menu
-        setCurrentScreen('menu');
-      }
-    }
-  }, [user, currentScreen, isAnonymousMode]);
-
-  // Charger le mode et la progression au démarrage
-  useEffect(() => {
-    const savedMode = localStorage.getItem('faithChronicles_mode');
-    const savedPseudo = localStorage.getItem('faithChronicles_pseudo');
-    const savedProgress = localStorage.getItem('faithChroniclesProgress');
-
-    // console.log('🔄 Chargement initial:', { savedMode, savedPseudo, hasProgress: !!savedProgress });
-
-    if (savedMode === 'anonymous' && savedPseudo) {
-      setIsAnonymousMode(true);
-      setCurrentScreen('menu');
-      
-      // Charger la progression depuis localStorage pour mode anonyme
-      if (savedProgress) {
-        try {
-          const progress = JSON.parse(savedProgress);
-          // console.log('📦 Chargement progression localStorage complète:', {
-          //   score: progress.score || 0,
-          //   wisdomPoints: progress.wisdomPoints || 0,
-          //   revelationPoints: progress.revelationPoints || 0,
-          //   totalXP: progress.totalXP || 0,
-          //   niveauxDébloqués: (progress.unlockedLevels || [1]).length,
-          //   étoiles: Object.keys(progress.levelStars || {}).length
-          // });
-          
-          // Charger TOUTES les données
-          setScore(progress.score || 0);
-          setWisdomPoints(progress.wisdomPoints || 0);
-          setRevelationPoints(progress.revelationPoints || 0);
-          setUnlockedLevels(progress.unlockedLevels || [1]);
-          setLevelStars(progress.levelStars || {});
-          setTotalXP(progress.totalXP || 0);
-        } catch (error) {
-          // console.error('Erreur chargement progression localStorage:', error);
-        }
-      }
-    } else if (user && !isAnonymousMode) {
-      // Pour les utilisateurs connectés, forcer un rechargement
-      // console.log('🔄 Utilisateur connecté détecté, rechargement progression...');
-      setCurrentScreen('menu');
+    } catch {
+      // L’accès au jeu reste possible si le stockage du navigateur est bloqué.
     }
   }, []);
-
-  // Fonction de déconnexion
-  const handleLogout = async () => {
-    try {
-      // Déconnexion Supabase si connecté
-      if (user && !isAnonymousMode) {
-        const { error } = await supabase.auth.signOut();
-        // if (error) console.error('Erreur déconnexion:', error);
-      }
-      
-      // Réinitialiser l'état local
-      setCurrentScreen('login');
-    } catch (error) {
-      // console.error('Erreur lors de la déconnexion:', error);
-    }
-  };
-
-  // Fonction pour basculer du mode anonyme vers la connexion
-  const handleSwitchToLogin = () => {
-    // console.log('🔄 Basculement du mode anonyme vers la connexion');
-    // Garder la progression actuelle
-    const progressData = {
-      score,
-      wisdomPoints,
-      revelationPoints,
-      unlockedLevels,
-      levelStars,
-      totalXP,
-      lastSaveTime: Date.now()
-    };
-    localStorage.setItem('faithChroniclesProgress', JSON.stringify(progressData));
-    
-    // Passer en mode connexion
-    setIsAnonymousMode(false);
-    localStorage.removeItem('faithChronicles_mode');
-    setCurrentScreen('login');
-  };
 
   // 🎮 Fonctions de sauvegarde/chargement de jeu
   const handleManualSave = async () => {
@@ -558,8 +325,6 @@ const FaithChronicles = () => {
     user,  // Exposer l'utilisateur connecté
     isAnonymousMode,  // Mode anonyme (localStorage uniquement)
     isSupabaseConnected: Boolean(user && isConfigured && !isAnonymousMode),  // Indicateur de connexion Supabase
-    onLogout: handleLogout,  // Fonction de déconnexion
-    onSwitchToLogin: handleSwitchToLogin,  // Fonction pour passer du mode anonyme à la connexion
     onRefresh: handleRefresh,  // Fonction de rechargement manuel
     onManualSave: handleManualSave,  // Fonction de sauvegarde manuelle
     onLoadSave: handleLoadSave,  // Fonction de chargement de sauvegarde
@@ -573,27 +338,6 @@ const FaithChronicles = () => {
              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.2)'
            }}>
 
-        {currentScreen === 'login' && (
-          <LoginScreen
-            onLoginWithPassword={signInWithPassword}
-            onSignup={signUpWithPassword}
-            onResetPassword={resetPassword}
-            onAnonymousLogin={handleAnonymousLogin}
-            audio={audio}
-          />
-        )}
-        {currentScreen === 'password-reset' && (
-          <PasswordResetScreen
-            onResetComplete={() => setCurrentScreen('login')}
-          />
-        )}
-        {currentScreen === 'pseudo-setup' && (
-          <PseudoSetupScreen
-            onPseudoSet={handlePseudoSetup}
-            userEmail={user?.email}
-            audio={audio}
-          />
-        )}
         {currentScreen === 'menu' && <MenuScreen {...screenProps} />}
         {currentScreen === 'levelSelect' && <LevelSelectScreen {...screenProps} />}
         {currentScreen === 'challenge' && <ChallengeScreen {...screenProps} />}
