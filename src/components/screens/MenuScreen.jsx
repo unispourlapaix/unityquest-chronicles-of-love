@@ -1,3 +1,4 @@
+import SheepScoreShare from '../SheepScoreShare';
 import React from 'react';
 import { ChevronRight, Star, Trophy, Sparkles, Info, Gem, Book, BookOpen, Heart } from 'lucide-react';
 import { bibleData, bibleTreasures } from '../../data/bible';
@@ -267,7 +268,7 @@ const MenuScreen = ({
         )}
       </div>
 
-      <div className="relative z-10 p-8 h-full flex flex-col justify-between">
+      <div className="relative z-10 p-8 h-full flex flex-col justify-between overflow-y-auto">
         <div className="text-center">
           {/* Logo avec croix moderne - Cliquable pour Unity */}
           <button
@@ -314,6 +315,7 @@ const MenuScreen = ({
             </div>
           </button>
           
+          <SheepScoreShare score={score} />
           {/* Titre avec effet 3D */}
           <div className="mb-4">
             <h1 className={`font-black mb-3 tracking-wider relative ${

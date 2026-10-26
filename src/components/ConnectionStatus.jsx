@@ -315,18 +315,6 @@ const ConnectionStatus = ({
               {/* Boutons d'action */}
               <div className="flex items-center space-x-1">
                 {/* Bouton "Se connecter" pour les anonymes */}
-                {isAnonymousMode && onSwitchToLogin && (
-                  <button
-                    onClick={() => {
-                      audio?.sounds?.buttonClick();
-                      onSwitchToLogin();
-                    }}
-                    className="p-1.5 hover:bg-blue-50 rounded-full transition-colors group"
-                    title={t('login.connectToCloud')}
-                  >
-                    <Cloud className="w-3.5 h-3.5 text-blue-600 group-hover:text-blue-700" />
-                  </button>
-                )}
 
                 {/* Bouton de sauvegarde manuelle */}
                 {onManualSave && (

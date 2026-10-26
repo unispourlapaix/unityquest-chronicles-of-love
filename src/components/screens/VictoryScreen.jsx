@@ -1,3 +1,4 @@
+import SheepScoreShare from '../SheepScoreShare';
 import React, { useRef, useEffect } from 'react';
 import QuizMountain, { useQuizMountain } from '../QuizMountain';
 import useTranslation from '../../hooks/useTranslation';
@@ -43,8 +44,9 @@ const VictoryScreen = ({
   }, [currentLevel, mountain, levelStars]);
 
   return (
-    <div className="relative z-10 p-8 h-full flex flex-col justify-center items-center">
+    <div className="relative z-10 p-8 h-full flex flex-col items-center overflow-y-auto">
       <div className="text-center">
+        <SheepScoreShare score={score} />
         <h2 className="text-xl font-bold text-black mb-3 flex items-center justify-center gap-2">
           🏆 <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">{t('labels.knowledgeMastered')}</span> 🏆
         </h2>

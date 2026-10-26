@@ -7,7 +7,7 @@ import { debounce } from '../utils/retryHelper.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 
-import LoginScreen from './screens/LoginScreenSimple';
+import LoginScreen from './screens/LocalLoginScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import PseudoSetupScreen from './screens/PseudoSetupScreen';
 import MenuScreen from './screens/MenuScreen';
@@ -95,6 +95,7 @@ const FaithChronicles = () => {
 
   // Détecter si on arrive depuis un lien de réinitialisation de mot de passe
   useEffect(() => {
+    if (!isConfigured) return;
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const type = hashParams.get('type');
     const error = hashParams.get('error');
