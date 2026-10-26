@@ -50,3 +50,5 @@ La page artiste respecte la langue transmise par le jeu. L’arabe et l’hébre
 Source commune : src/data/localTranslations.json. Après modification, lancer npm run sync:local-translations pour mettre à jour le fichier public autonome. Vérification sans installation de dépendances : npm run test:local-translations (ou node scripts/test-local-translations.mjs). Les 17 langues ont aussi été parcourues dans le navigateur ; aucun texte ajouté n’y est vide.
 
 Le compagnon est désormais un mouton kawaii dessiné en SVG local, assis sur un nuage de cœurs. Quatre couleurs et expressions sont choisies au hasard sans répétition immédiate. Les mêmes dessins sont utilisés par le jeu et la page artiste ; aucun téléchargement externe n’est nécessaire.
+
+Le partage joint une carte PNG avec le mouton sélectionné, le pseudo actuel, le score et des émojis. Si le partage de fichiers est indisponible, la carte est téléchargée pour être jointe au message. Une annulation reste sans effet. Les messages sont traduits dans les 17 langues.

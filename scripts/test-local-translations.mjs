@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
 const translations = JSON.parse(fs.readFileSync('src/data/localTranslations.json','utf8'));
-const script = fs.readFileSync('public/artist.js', 'utf8');
+const script = fs.readFileSync('public/artist.js', 'utf8').replace(/^import .*;\r?\n/, '');
 const html = fs.readFileSync('public/emmanuel-artist-module.html', 'utf8');
 const ids = [...html.matchAll(/id="([^"]+)"/g)].map(x => x[1]);
 assert.equal(ids.length, new Set(ids).size);
@@ -11,7 +11,14 @@ function setup({ saved, pseudo = 'Brebis <script>', blocked = false, navigator =
   const elements = Object.fromEntries(ids.map(id => [id, { textContent:'', value:'', hidden:id === 'manual-share', style:{}, attributes:{}, handlers:{}, setAttribute(name,value){this.attributes[name]=value;}, focus(){}, select(){}, addEventListener(name, handler){ this.handlers[name] = handler; } }]));
   const listeners = {};
   const store = { getItem(key) { if (blocked) throw new Error('blocked'); return key === 'faithChroniclesProgress' ? raw : key === 'faithChronicles_pseudo' ? pseudo : null; }, setItem(){} };
-  const context = vm.createContext({ document:{getElementById:id => elements[id], documentElement:{}, querySelectorAll:()=>[]}, window:{UNITYQUEST_LOCAL_TRANSLATIONS:translations,addEventListener:(key,handler)=>listeners[key]=handler}, location:{search:lang}, navigator, localStorage:store, URLSearchParams, Intl, console });
+  const context = vm.createContext({ document:{getElementById:id => elements[id], documentElement:{}, querySelectorAll:()=>[]}, window:{UNITYQUEST_LOCAL_TRANSLATIONS:translations,addEventListener:(key,handler)=>listeners[key]=handler}, location:{search:lang}, navigator, localStorage:store, URLSearchParams, Intl, console, shareScoreImage: async options => {
+    if (navigator.share) {
+      try { await navigator.share({title:options.texts.words.score,text:options.text,files:[{name:'unityquest-score.png',type:'image/png'}]});return 'shared'; }
+      catch(error){if(error.name==='AbortError')return 'cancelled';}
+    }
+    if(navigator.clipboard?.writeText)try{await navigator.clipboard.writeText(options.text);}catch{}
+    return 'downloaded';
+  } });
   vm.runInContext(script, context);
   return { elements, listeners, setSave(value){raw=value;}, click(id){return elements[id].handlers.click();} };
 }
@@ -31,10 +38,10 @@ for(const saved of [null,'{invalid','[]','null','{}']){ page = setup({saved}); a
 page = setup({blocked:true}); assert.match(page.elements['data-state'].textContent,/inaccessible/);
 let copied = '';
 page = setup({saved:data,navigator:{clipboard:{async writeText(text){copied=text;}}}});
-await page.click('share');assert.match(copied,/1\s?234/);assert.match(copied,/🐑/);assert.match(page.elements['share-state'].textContent,/copiés/);
+await page.click('share');assert.match(copied,/1\s?234/);assert.match(copied,/🐑/);assert.match(page.elements['share-state'].textContent,/téléchargée/);
 page.setSave(JSON.stringify({score:7654}));await page.click('share');assert.match(copied,/7\s?654/);
 let native;
-page=setup({saved:data,navigator:{async share(value){native=value;}}});await page.click('share');assert.equal(native.title,'UnityQuest');assert.match(native.text,/1\s?234/);
+page=setup({saved:data,navigator:{async share(value){native=value;}}});await page.click('share');assert.equal(native.title,translations.fr.words.score);assert.match(native.text,/1\s?234/);assert.equal(native.files[0].type,'image/png');
 page=setup({saved:data,navigator:{async share(){throw Object.assign(new Error(),{name:'AbortError'});}}});await page.click('share');assert.equal(page.elements['share-state'].textContent,'');
 page=setup({saved:data,navigator:{clipboard:{async writeText(){throw new Error();}}}});await page.click('share');assert.equal(page.elements['manual-share'].hidden,false);assert.match(page.elements['manual-share'].value,/🐑/);
 page=setup({saved:data,lang:'?lang=en'});assert.match(page.elements['data-state'].textContent,/Your progress/);

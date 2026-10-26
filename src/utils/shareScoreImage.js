@@ -54,7 +54,9 @@ export function downloadScoreImage(file) {
 export async function shareScoreImage(options) {
   const file = await createScoreImage(options);
   const payload = { title: options.texts.words.score, text: options.text, files: [file] };
-  if (typeof navigator.share === 'function' && typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
+  let supportsFiles = false;
+  try { supportsFiles = typeof navigator.share === 'function' && typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] }); } catch {}
+  if (supportsFiles) {
     try { await navigator.share(payload); return 'shared'; }
     catch (error) { if (error.name === 'AbortError') return 'cancelled'; }
   }
