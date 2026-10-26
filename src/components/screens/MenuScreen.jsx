@@ -1,5 +1,4 @@
 import { getLocalTexts } from '../../utils/localTranslations';
-import SheepScoreShare from '../SheepScoreShare';
 import React from 'react';
 import { ChevronRight, Star, Trophy, Sparkles, Info, Gem, Book, BookOpen, Heart } from 'lucide-react';
 import { bibleData, bibleTreasures } from '../../data/bible';
@@ -120,7 +119,7 @@ const MenuScreen = ({
       </div>
 
       {/* Indicateur de connexion discret */}
-      <ConnectionStatus audio={audio} score={score} />
+      <ConnectionStatus audio={audio} score={score} variantIndex={companionIndex} onVariantChange={setCompanionIndex} />
 
       {/* Contrôles Audio - juste l'icône au début */}
       <div className="absolute top-3 left-3 z-50">
@@ -273,7 +272,6 @@ const MenuScreen = ({
           }} aria-label={localTexts.labels.companion} className="mb-2 mx-auto block hover:scale-105 active:scale-95 transition-transform">
             <img src={(process.env.PUBLIC_URL || '') + '/companions/sheep-' + companionIndex + '.svg'} width="260" height="250" alt={localTexts.labels.companion} className="w-40 h-auto mx-auto" />
           </button>
-          <SheepScoreShare score={score} variantIndex={companionIndex} onVariantChange={setCompanionIndex} showMascot={false} />
           {/* Titre avec effet 3D */}
           <div className="mb-4">
             <h1 className={`font-black mb-3 tracking-wider relative ${

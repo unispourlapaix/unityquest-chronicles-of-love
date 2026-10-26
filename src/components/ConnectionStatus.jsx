@@ -5,7 +5,7 @@ import { User, Edit2, Check, X } from 'lucide-react';
 import { getLanguage, getLanguageList } from '../data/translations/languages.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 
-const ConnectionStatus = ({ className = "", audio, score = 0 }) => {
+const ConnectionStatus = ({ className = "", audio, score = 0, variantIndex, onVariantChange }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditingPseudo, setIsEditingPseudo] = useState(false);
   const [newPseudo, setNewPseudo] = useState('');
@@ -245,8 +245,8 @@ const ConnectionStatus = ({ className = "", audio, score = 0 }) => {
         </div>
       </div>
       {isExpanded && (
-        <div className="absolute right-0 top-14 w-[280px] max-w-[85vw] z-50 rounded-2xl bg-white shadow-xl p-2">
-          <SheepScoreShare score={score} compact />
+        <div className="absolute right-0 top-14 w-[280px] max-w-[85vw] max-h-[75vh] overflow-y-auto z-50 rounded-2xl bg-white shadow-xl p-2">
+          <SheepScoreShare score={score} variantIndex={variantIndex} onVariantChange={onVariantChange} />
         </div>
       )}
     </div>
