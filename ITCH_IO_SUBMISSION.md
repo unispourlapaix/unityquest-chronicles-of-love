@@ -207,7 +207,7 @@ This game was created with the belief that while our religious traditions differ
 - **Platform**: HTML5 (Browser Game)
 - **Technology**: React, Tailwind CSS
 - **Requirements**: Modern web browser (Chrome, Firefox, Safari, Edge)
-- **Storage**: LocalStorage for offline saves, Optional cloud sync via Supabase
+- **Storage**: LocalStorage for offline saves
 - **Performance**: Optimized for mobile and desktop
 
 ---

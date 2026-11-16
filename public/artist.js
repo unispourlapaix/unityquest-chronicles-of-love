@@ -1,14 +1,14 @@
-import { shareScoreImage } from './share-score-image.js';
+import { shareScoreImage, scoreShareText } from './share-score-image.js';
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
   const translations = window.UNITYQUEST_LOCAL_TRANSLATIONS;
   const words = Object.fromEntries(Object.entries(translations).map(([code, texts]) => [code, texts.words]));
   const companions = [
-    { face: '🐑 🌸', color: '#faf0f4' },
-    { face: '🐑 ✨', color: '#faf5e7' },
-    { face: '🐑 🌿', color: '#edf4ed' },
-    { face: '🐑 💜', color: '#f1ecf9' }
+    { color: '#faf0f4' },
+    { color: '#faf5e7' },
+    { color: '#edf4ed' },
+    { color: '#f1ecf9' }
   ];
   let language = 'fr';
   let companion = Math.floor(Math.random() * companions.length);
@@ -69,12 +69,11 @@ import { shareScoreImage } from './share-score-image.js';
     renderProgress();
     if (progress.state !== 'ready') return;
     resetShare(); sharing = true; $('share').disabled = true;
-    const mascot = companions[companion];
     const savedName = localStorage.getItem('faithChronicles_pseudo')?.trim();
     const sharedName = !savedName || savedName === 'Joueur local' ? '' : savedName;
-    const text = `${mascot.face} 💗 ✨ 😊 ${sharedName ? sharedName + ' — ' : ''}${words[language].score} : ${format(progress.score)} ${words[language].points} !\n${translations[language].sheep[companion]}`;
+    const text = scoreShareText({ variant: companion, pseudo: sharedName, score: progress.score, texts: translations[language] });
     try {
-      const result = await shareScoreImage({ variant: companion, pseudo: sharedName, score: progress.score, texts: translations[language], assetBase: '.', text });
+      const result = await shareScoreImage({ variant: companion, pseudo: sharedName, score: progress.score, texts: translations[language], text });
       if (result === 'shared') $('share-state').textContent = words[language].shared;
       else if (result === 'downloaded') { showManual(text); $('share-state').textContent = words[language].downloaded; }
     } catch (error) { if (error.name !== 'AbortError') { showManual(text); $('share-state').textContent = words[language].imageError; } }

@@ -1,3 +1,5 @@
+> **Archive — ancienne version :** les instructions concernant la connexion et la synchronisation à distance ne s’appliquent plus. La progression et les préférences sont enregistrées localement dans le navigateur.
+
 # 🚀 Système de Cache et Performance
 
 ## 📋 Vue d'ensemble

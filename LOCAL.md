@@ -19,15 +19,9 @@ Les contenus audio distants du projet d’origine peuvent encore nécessiter Int
 
 Les modifications ont été examinées et contrôlées avec git diff. Le lancement et la compilation restent à vérifier : npm install échoue sous Windows avec EPERM lors de la création de sous-dossiers node_modules.
 
-## Contrôle complémentaire du cloud
+## Stockage local
 
-Deux pages annexes (emmanuel-artist-module.html et emmanuel-artist-moduletest.html) créaient encore un client Supabase indépendant. Ces connexions ont été retirées ; les pages affichent maintenant la progression locale réelle, sans scores de secours inventés. L’ancien export de session et l’import depuis la production sont désactivés. Le workflow ne transmet plus les variables Supabase ; le script de configuration distante est neutralisé.
-
-Vérifications automatisées réussies : client principal nul ; six opérations d’authentification distante refusées ; absence de client et d’adresse Supabase dans les pages publiques ; syntaxe des scripts HTML ; lecture du score local (321 points), du niveau et de la sagesse ; gestion d’une sauvegarde absente ou invalide ; absence de script dans l’ancien exporteur.
-
-Les références anciennes dans les traductions, la documentation et les branches cloud inaccessibles ne créent aucune connexion. La dépendance Supabase reste dans le manifeste mais n’est plus importée par un code créant un client.
-
-Ce contrôle porte sur la copie locale. Le service Supabase distant et le site GitHub Pages n’ont pas été modifiés. Le lancement complet reste non vérifié à cause de l’erreur npm EPERM signalée plus haut.
+Le jeu utilise uniquement le stockage de ce navigateur pour la progression. Aucun client, identifiant ou service de sauvegarde distante n’est requis.
 
 ## Nouvelle page artiste
 

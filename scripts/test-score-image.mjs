@@ -1,16 +1,26 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createScoreImage,shareScoreImage} from '../src/utils/shareScoreImage.js';
+import {createScoreImage,shareScoreImage,scoreShareText} from '../src/utils/shareScoreImage.js';
 const texts=JSON.parse(fs.readFileSync('src/data/localTranslations.json','utf8')).fr;
-let downloads=0,payload=null,draws=0;
+let downloads=0,payload=null,pixels=[];
 const labels=[];
-const ctx={createLinearGradient:()=>({addColorStop(){}}),fillRect(){},beginPath(){},roundRect(){},fill(){},fillText(value){labels.push(value);},measureText:value=>({width:String(value).length*15}),drawImage(){draws++;}};
+const ctx={createLinearGradient:()=>({addColorStop(){}}),fillRect(x,y,w,h){pixels.push([this.fillStyle,x,y,w,h]);},beginPath(){},roundRect(){},fill(){},fillText(value){labels.push(value);},measureText:value=>({width:String(value).length*15})};
 globalThis.document={createElement:type=>type==='canvas'?{getContext:()=>ctx,toBlob:callback=>callback(new Blob(['test'],{type:'image/png'}))}:{click(){downloads++;},remove(){}},body:{appendChild(){}}};
 globalThis.Image=class{set src(value){queueMicrotask(()=>this.onload());}};
 const timer=globalThis.setTimeout;globalThis.setTimeout=()=>0;
 const setNavigator=value=>Object.defineProperty(globalThis,'navigator',{value,configurable:true});
 const options={variant:2,pseudo:'Nom modifié',score:4321,texts,assetBase:'.',text:'🐑 💗 ✨ 😊 Nom modifié — 4321 points'};
-const file=await createScoreImage(options);assert.equal(file.type,'image/png');assert.equal(file.name,'unityquest-score.png');assert.ok(draws>0);assert.ok(labels.includes('Nom modifié'));assert.ok(labels.some(s=>s.includes('😊')));
+const landscapes=[];
+for(let variant=0;variant<4;variant++){
+  pixels=[]; labels.length=0;
+  const file=await createScoreImage({...options,variant});
+  assert.equal(file.type,'image/png'); assert.equal(file.name,'unityquest-score.png');
+  assert.ok(labels.includes('Nom modifié'));
+  assert.ok(labels.includes([':)',':D',';)','^_^'][variant]));
+  landscapes.push(JSON.stringify(pixels));
+}
+assert.equal(new Set(landscapes).size,4);
+assert.equal(scoreShareText({...options,pseudo:''}), 'Mon score sur UnityQuest : '+new Intl.NumberFormat('fr').format(4321)+' points — ;)');
 setNavigator({canShare:()=>true,async share(value){payload=value;}});assert.equal(await shareScoreImage(options),'shared');assert.equal(payload.files[0].type,'image/png');assert.equal(payload.text,options.text);assert.equal(downloads,0);
 setNavigator({canShare:()=>false,async share(){throw new Error('must not run');}});assert.equal(await shareScoreImage(options),'downloaded');assert.equal(downloads,1);
 setNavigator({canShare:()=>true,async share(){throw Object.assign(new Error(),{name:'AbortError'});}});assert.equal(await shareScoreImage(options),'cancelled');assert.equal(downloads,1);

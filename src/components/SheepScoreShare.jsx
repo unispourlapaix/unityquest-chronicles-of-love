@@ -1,12 +1,12 @@
-import { shareScoreImage } from '../utils/shareScoreImage';
+import { shareScoreImage, scoreShareText } from '../utils/shareScoreImage';
 import React, { useEffect, useState } from 'react';
 import useTranslation from '../hooks/useTranslation';
 import { getLocalTexts, getLocalPlayerName } from '../utils/localTranslations';
 const sheep = [
-  { face: '🐑 🌸', color: 'bg-pink-50' },
-  { face: '🐑 ✨', color: 'bg-amber-50' },
-  { face: '🐑 🌿', color: 'bg-green-50' },
-  { face: '🐑 💜', color: 'bg-purple-50' }
+  { color: 'bg-pink-50' },
+  { color: 'bg-amber-50' },
+  { color: 'bg-green-50' },
+  { color: 'bg-purple-50' }
 ];
 export default function SheepScoreShare({ score = 0, compact = false, variantIndex, onVariantChange, showMascot = true }) {
   const { currentLanguage } = useTranslation();
@@ -30,10 +30,10 @@ export default function SheepScoreShare({ score = 0, compact = false, variantInd
     setIsSharing(true);
     const savedName = localStorage.getItem('faithChronicles_pseudo')?.trim();
     const pseudo = !savedName || savedName === 'Joueur local' ? '' : savedName;
-    const text = `${mascot.face} 💗 ✨ 😊 ${pseudo ? pseudo + ' — ' : ''}${texts.words.score} : ${formattedScore} ${texts.words.points} !\n${texts.sheep[index]}`;
+    const text = scoreShareText({ variant: index, pseudo, score, texts });
     setStatus(''); setManualText('');
     try {
-      const result = await shareScoreImage({ variant: index, pseudo, score, texts, assetBase: process.env.PUBLIC_URL || '', text });
+      const result = await shareScoreImage({ variant: index, pseudo, score, texts, text });
       if (result === 'shared') setStatus('shared');
       else if (result === 'downloaded') { setManualText(text); setStatus('downloaded'); }
     } catch (error) {

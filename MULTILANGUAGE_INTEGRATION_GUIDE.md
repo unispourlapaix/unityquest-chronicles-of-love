@@ -1,3 +1,5 @@
+> **Archive — ancienne version :** les instructions concernant la connexion et la synchronisation à distance ne s’appliquent plus. La progression et les préférences sont enregistrées localement dans le navigateur.
+
 # Guide d'Intégration du Système Multilingue
 ## Faith Chronicles - Support de 14 Langues
 

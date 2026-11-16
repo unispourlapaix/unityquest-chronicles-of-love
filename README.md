@@ -158,16 +158,7 @@ npm start
 
  **Done!** Open your browser to `http://localhost:3000`
 
-### Optional: Cloud Sync
-
-To save progress across devices, create `.env.local`:
-
-```env
-REACT_APP_SUPABASE_URL=your_supabase_url
-REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-Without this, progress saves locally (works perfectly fine).
+Progress and the player nickname are stored in this browser. No account or cloud configuration is required.
 
 ---
 
@@ -177,7 +168,6 @@ Without this, progress saves locally (works perfectly fine).
 
 - **React 18**  User interface
 - **Tailwind CSS**  Styling
-- **Supabase**  Optional cloud sync
 - **LocalStorage**  Local saves
 
 ### Project Structure

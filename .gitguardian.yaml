@@ -12,27 +12,17 @@ paths-ignore:
 
 # Patterns spécifiques à ignorer
 matches-ignore:
-  # Clé Supabase ANON publique (safe pour frontend)
-  - name: Supabase anon key
-    match: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtc3p5eG93ZXRpbHZzYW5xc3htIiwicm9sZSI6ImFub24i
-
   # Exemples de configuration SMTP dans la documentation
   - name: SMTP documentation examples
     match: smtp\.gmail\.com
 
 # Détecteurs à activer (tous par défaut)
 detectors:
-  # Détecter les vraies clés service_role Supabase (dangereux)
-  - name: Supabase Service Key
-    enabled: true
   
   # Détecter les mots de passe SMTP réels
   - name: SMTP Credentials
     enabled: true
   
-  # NE PAS alerter sur les clés anon Supabase (publiques)
-  - name: Supabase Anon Key
-    enabled: false
 
 # Configuration minimale de sévérité
 minimum_severity: medium

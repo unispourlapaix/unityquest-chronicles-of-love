@@ -172,11 +172,11 @@ const QuestionScreen = ({
           audio?.sounds?.starEarned();
         }, 500);
         
-        // Sauvegarder les étoiles pour ce niveau (localement ET dans Supabase)
+        // Sauvegarder les étoiles de ce niveau
         const currentStars = levelStars[currentLevel] || 0;
         const finalStars = Math.max(currentStars, starsEarned);
         
-        // Utiliser saveStarsForLevel au lieu de setLevelStars pour sauvegarder aussi dans Supabase
+        // Enregistrer les étoiles dans la progression locale.
         await saveStarsForLevel(currentLevel, finalStars);
         
         if (!unlockedLevels.includes(currentLevel + 1) && currentLevel < 91) {

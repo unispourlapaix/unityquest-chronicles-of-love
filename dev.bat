@@ -5,6 +5,5 @@ echo 🚀 Demarrage du serveur de developpement FaithChronicles...taskkill /f /i
 echo.timeout /t 1 /nobreak >nul
 
 echo 📍 URL: http://localhost:3000npm start
-echo 🔑 Supabase: Configure dans .env
 echo.
 npm start
